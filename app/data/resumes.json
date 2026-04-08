@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "name": "Aarav Mehta",
+    "role": "Machine Learning Engineer",
+    "ground_truth_score": 0.93,
+    "resume_text": "ML Engineer with 6 years experience in Python, PyTorch, TensorFlow, MLOps, Kubernetes, and AWS. Built recommendation pipelines processing 40M events/day, reduced inference latency by 28%, implemented model monitoring, feature stores, and A/B testing. Strong in SQL, statistics, experimentation, and stakeholder communication."
+  },
+  {
+    "id": 2,
+    "name": "Nisha Kulkarni",
+    "role": "Backend Engineer",
+    "ground_truth_score": 0.88,
+    "resume_text": "Backend Developer with 5 years in Golang, Java, PostgreSQL, Redis, Kafka, and microservices. Delivered APIs serving 10k RPS, improved p99 latency by 35%, introduced observability with Prometheus and Grafana, built CI/CD pipelines, and wrote extensive integration tests."
+  },
+  {
+    "id": 3,
+    "name": "Rohit Sinha",
+    "role": "Frontend Engineer",
+    "ground_truth_score": 0.74,
+    "resume_text": "Frontend Engineer focused on React, TypeScript, Next.js, and accessibility. Built component libraries, optimized bundle size by 22%, improved Core Web Vitals, partnered with design systems, and implemented unit and E2E tests using Jest and Playwright."
+  },
+  {
+    "id": 4,
+    "name": "Fatima Noor",
+    "role": "Data Analyst",
+    "ground_truth_score": 0.62,
+    "resume_text": "Data Analyst with 4 years in SQL, Tableau, and Python for BI automation. Built executive dashboards, improved reporting quality, performed cohort analysis, and automated weekly KPI workflows. Limited production software engineering experience."
+  },
+  {
+    "id": 5,
+    "name": "Karan Bedi",
+    "role": "Platform Engineer",
+    "ground_truth_score": 0.81,
+    "resume_text": "Platform Engineer with Terraform, Docker, Kubernetes, and AWS expertise. Managed multi-region deployments, improved deployment success rate by 18%, built internal developer tooling, and implemented centralized logging and alerting."
+  },
+  {
+    "id": 6,
+    "name": "Ishita Rao",
+    "role": "Junior Software Engineer",
+    "ground_truth_score": 0.55,
+    "resume_text": "Junior Engineer with 1.5 years of experience in Python and Django. Built CRUD services and admin tools, collaborated on bug fixes, and contributed to QA automation. Strong growth mindset but limited ownership of large-scale systems."
+  },
+  {
+    "id": 7,
+    "name": "Dev Patel",
+    "role": "Full Stack Engineer",
+    "ground_truth_score": 0.79,
+    "resume_text": "Full Stack Engineer with Node.js, React, TypeScript, MongoDB, and GraphQL. Shipped customer-facing features, reduced support incidents by 14%, and led a migration to modular architecture with stronger test coverage."
+  },
+  {
+    "id": 8,
+    "name": "Priya Menon",
+    "role": "Senior Backend Engineer",
+    "ground_truth_score": 0.91,
+    "resume_text": "Senior Backend Engineer with 7 years in Python, FastAPI, distributed systems, PostgreSQL, Kafka, and cloud infrastructure. Led architecture for event-driven services, cut API latency by 31%, mentored engineers, and introduced SLO-based reliability practices."
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "1": "Candidate described an end-to-end ML pipeline, quantified a 28% latency reduction, discussed feature drift monitoring, and explained trade-offs between online and batch inference with clear ownership outcomes.",
+  "2": "Candidate explained API scalability to 10k RPS, used Kafka for async workflows, justified schema choices, and provided strong testing and observability examples with quantified p99 improvements.",
+  "3": "Candidate discussed React performance and accessibility improvements, but gave limited distributed systems depth and only high-level backend architecture explanations.",
+  "4": "Candidate gave detailed analytics examples and SQL dashboarding, but struggled with service design, production reliability, and engineering incident handling.",
+  "5": "Candidate demonstrated strong platform automation, Terraform module design, Kubernetes operations, and incident postmortem practices with measurable reliability gains.",
+  "6": "Candidate communicated well but gave mostly junior-level examples; lacked quantified impact and broad architecture decision experience.",
+  "7": "Candidate showed balanced product-engineering trade-offs and strong feature delivery, but had moderate depth in reliability and data-intensive backend systems.",
+  "8": "Candidate explained event-driven architecture, reliability engineering, latency optimization, mentoring, and trade-offs across consistency, cost, and operational complexity."
+}

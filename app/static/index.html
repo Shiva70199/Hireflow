@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HireFlow — Hiring Pipeline SaaS</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --panel: #1a2332;
+      --text: #e7ecf3;
+      --muted: #8b9cb3;
+      --accent: #3b82f6;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --err: #ef4444;
+      --border: #2d3a4d;
+      --font: "Segoe UI", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh;
+      background: linear-gradient(165deg, #0c1220 0%, var(--bg) 40%);
+      color: var(--text); font-family: var(--font);
+    }
+    header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;
+    }
+    header h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+    header span { color: var(--muted); font-size: 0.85rem; }
+    main { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
+    .grid { display: grid; gap: 1rem; grid-template-columns: 1fr 1fr; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.25rem;
+    }
+    .card h2 { margin: 0 0 0.75rem; font-size: 0.95rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+    label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 0.35rem; }
+    input, select, textarea {
+      width: 100%; padding: 0.6rem 0.75rem; border-radius: 8px;
+      border: 1px solid var(--border); background: #0d1520; color: var(--text);
+      font-family: ui-monospace, monospace; font-size: 0.85rem;
+    }
+    textarea { min-height: 88px; resize: vertical; }
+    button {
+      cursor: pointer; border: none; border-radius: 8px; padding: 0.65rem 1rem;
+      font-weight: 600; font-size: 0.9rem; font-family: var(--font);
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { filter: brightness(1.08); }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+    .row { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: flex-end; margin-bottom: 0.75rem; }
+    .row > div { flex: 1; min-width: 120px; }
+    pre {
+      margin: 0; padding: 1rem; background: #0d1520; border-radius: 8px;
+      border: 1px solid var(--border); font-size: 0.78rem; overflow: auto; max-height: 420px;
+      white-space: pre-wrap; word-break: break-word;
+    }
+    .badge { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; }
+    .badge-ok { background: rgba(34,197,94,0.2); color: var(--ok); }
+    .badge-warn { background: rgba(245,158,11,0.2); color: var(--warn); }
+    .links a { color: var(--accent); margin-right: 1rem; font-size: 0.9rem; }
+    footer { padding: 1rem 1.5rem; color: var(--muted); font-size: 0.8rem; text-align: center; border-top: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>HireFlow Multi-Agent SaaS</h1>
+      <span>Resume screening → Interview → HR decision · OpenEnv-compatible backend</span>
+    </div>
+    <div class="links">
+      <a href="/docs" target="_blank" rel="noopener">API docs (Swagger)</a>
+      <a href="/health" target="_blank" rel="noopener">Health</a>
+    </div>
+  </header>
+  <main>
+    <div class="card" style="margin-bottom:1rem;">
+      <h2>Connection</h2>
+      <div class="row">
+        <div style="flex:2;">
+          <label for="apiToken">API token (optional — must match HIREFLOW_API_TOKEN on server)</label>
+          <input id="apiToken" type="password" placeholder="Leave empty if server has no token" autocomplete="off" />
+        </div>
+        <div><button type="button" class="btn-ghost" id="saveToken">Save in browser</button></div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h2>1 · New session</h2>
+        <div class="row">
+          <div>
+            <label for="task">Task</label>
+            <select id="task">
+              <option value="easy">easy — screening only</option>
+              <option value="medium">medium — screening + interview</option>
+              <option value="hard" selected>hard — full pipeline + rank</option>
+            </select>
+          </div>
+          <div>
+            <label for="seed">Seed</label>
+            <input id="seed" type="number" value="42" />
+          </div>
+        </div>
+        <button type="button" class="btn-primary" id="btnCreate">Create session</button>
+        <p style="margin:0.75rem 0 0; font-size:0.85rem; color:var(--muted);">
+          Session ID: <strong id="sessionId" style="color:var(--text);">—</strong>
+        </p>
+      </div>
+      <div class="card">
+        <h2>2 · Step (action)</h2>
+        <div class="row">
+          <div>
+            <label for="decision">decision</label>
+            <select id="decision">
+              <option value="shortlist">shortlist</option>
+              <option value="reject">reject</option>
+              <option value="hire">hire</option>
+              <option value="rank">rank</option>
+            </select>
+          </div>
+          <div>
+            <label for="rating">rating (0–1, optional)</label>
+            <input id="rating" type="text" placeholder="0.85" />
+          </div>
+        </div>
+        <label for="reasoning">reasoning</label>
+        <textarea id="reasoning" placeholder="Explain the decision with job-relevant criteria."></textarea>
+        <label for="ranking" style="margin-top:0.5rem;">ranking (JSON array of candidate ids, optional — e.g. [1,8,3])</label>
+        <input id="ranking" type="text" placeholder='[1,2,3]' />
+        <div style="margin-top:0.75rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <button type="button" class="btn-primary" id="btnStep">Send step</button>
+          <span id="stepMeta"></span>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1rem;">
+      <h2>Last response</h2>
+      <p style="margin:0 0 0.5rem;">
+        <span class="badge badge-ok" id="badgeDone">done: —</span>
+        <span class="badge badge-warn" id="badgeReward" style="margin-left:0.5rem;">reward: —</span>
+      </p>
+      <pre id="output">Create a session, then send a step. JSON will appear here.</pre>
+    </div>
+  </main>
+  <footer>HireFlow-MultiAgentEnv · Served by FastAPI · Same origin as your API (no CORS issues)</footer>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const headers = () => {
+      const h = { "Content-Type": "application/json" };
+      const t = $("apiToken").value.trim();
+      if (t) h["x-api-token"] = t;
+      return h;
+    };
+    const tokenKey = "hireflow_api_token";
+    $("apiToken").value = localStorage.getItem(tokenKey) || "";
+    $("saveToken").onclick = () => {
+      localStorage.setItem(tokenKey, $("apiToken").value.trim());
+      $("stepMeta").textContent = "Token saved.";
+      setTimeout(() => { $("stepMeta").textContent = ""; }, 2000);
+    };
+
+    $("btnCreate").onclick = async () => {
+      $("stepMeta").textContent = "Creating…";
+      try {
+        const body = JSON.stringify({
+          task: $("task").value,
+          seed: Number($("seed").value) || 42
+        });
+        const r = await fetch("/v1/sessions", { method: "POST", headers: headers(), body });
+        const data = await r.json();
+        if (!r.ok) throw new Error(data.detail || JSON.stringify(data));
+        $("sessionId").textContent = data.session_id;
+        $("output").textContent = JSON.stringify(data, null, 2);
+        $("badgeDone").textContent = "done: false";
+        $("badgeReward").textContent = "reward: —";
+        $("stepMeta").textContent = "OK";
+      } catch (e) {
+        $("stepMeta").textContent = "Error";
+        $("output").textContent = String(e);
+      }
+    };
+
+    $("btnStep").onclick = async () => {
+      const sid = $("sessionId").textContent.trim();
+      if (!sid || sid === "—") {
+        $("output").textContent = "Create a session first.";
+        return;
+      }
+      const payload = {
+        decision: $("decision").value,
+        reasoning: $("reasoning").value || " "
+      };
+      const rt = $("rating").value.trim();
+      if (rt !== "") {
+        const n = parseFloat(rt);
+        if (!Number.isNaN(n)) payload.rating = n;
+      }
+      const rk = $("ranking").value.trim();
+      if (rk !== "") {
+        try { payload.ranking = JSON.parse(rk); } catch (e) {
+          $("output").textContent = "Invalid ranking JSON: " + e;
+          return;
+        }
+      }
+      $("stepMeta").textContent = "Stepping…";
+      try {
+        const r = await fetch("/v1/sessions/" + encodeURIComponent(sid) + "/step", {
+          method: "POST",
+          headers: headers(),
+          body: JSON.stringify(payload)
+        });
+        const data = await r.json();
+        $("output").textContent = JSON.stringify(data, null, 2);
+        $("badgeDone").textContent = "done: " + (data.done === true);
+        const rw = data.reward && typeof data.reward.total === "number" ? data.reward.total.toFixed(2) : "—";
+        $("badgeReward").textContent = "reward: " + rw;
+        if (data.info && data.info.error) $("badgeReward").className = "badge badge-warn";
+        else $("badgeReward").className = "badge badge-ok";
+        $("stepMeta").textContent = r.ok ? "OK" : "HTTP " + r.status;
+      } catch (e) {
+        $("stepMeta").textContent = "Error";
+        $("output").textContent = String(e);
+      }
+    };
+  </script>
+</body>
+</html>

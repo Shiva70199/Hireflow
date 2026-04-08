@@ -1,0 +1,22 @@
+[
+  {
+    "id": "job-ml-01",
+    "title": "Senior ML Engineer",
+    "description": "Hiring a Senior ML Engineer with experience in Python, PyTorch or TensorFlow, MLOps, feature engineering, model monitoring, experimentation, SQL, and cloud deployment on AWS."
+  },
+  {
+    "id": "job-be-02",
+    "title": "Backend Engineer",
+    "description": "Need Backend Engineer skilled in Python or Golang, distributed systems, REST APIs, PostgreSQL, Redis, Kafka, CI/CD, observability, reliability, and performance optimization."
+  },
+  {
+    "id": "job-fe-03",
+    "title": "Frontend Engineer",
+    "description": "Looking for Frontend Engineer strong in React, TypeScript, performance, accessibility, design systems, component architecture, testing, and collaboration with product teams."
+  },
+  {
+    "id": "job-platform-04",
+    "title": "Platform Engineer",
+    "description": "Seeking Platform Engineer with Kubernetes, Docker, Terraform, cloud infrastructure, SRE mindset, automation, monitoring, incident response, and developer platform tooling."
+  }
+]

@@ -1,0 +1,22 @@
+name: hireflow-multiagent-env
+description: multi-stage hiring simulation
+entrypoint: app.env:HireFlowEnv
+tasks:
+  - id: easy
+    description: Single-candidate screening classification
+    params:
+      task: easy
+  - id: medium
+    description: Screening and interview evaluation
+    params:
+      task: medium
+  - id: hard
+    description: Multi-candidate full hiring pipeline with ranking
+    params:
+      task: hard
+metadata:
+  framework: openenv
+  version: "1.0.0"
+  author: "HireFlow Team"
+  deterministic_grading: true
+  max_memory_gb: 8
