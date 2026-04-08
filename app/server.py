@@ -6,7 +6,7 @@ from pathlib import Path
 from threading import Lock
 from typing import Any, Dict
 
-from fastapi import Body, FastAPI, Header, HTTPException
+from fastapi import Body, FastAPI, Header, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -59,18 +59,17 @@ def create_session(payload: CreateSessionRequest, x_api_token: str | None = Head
     sid = str(uuid.uuid4())
     with _LOCK:
         _SESSIONS[sid] = SessionRecord(env=env, done=False)
-    return {"session_id": sid, "observation": obs.model_dump(), "state": env.state()}
+    return {"session_id": sid, "observation": obs.model_dump(), "state": env.state(), "done": False}
 
 @app.post("/reset")
 def openenv_reset(
     body: Dict[str, Any] = Body(default_factory=dict),
-    x_api_token: str | None = Header(default=None),
 ) -> JSONResponse:
     """
     OpenEnv-style endpoint for Spaces compatibility.
     Creates a new session and returns the initial observation.
     """
-    _check_auth(x_api_token)
+    # Public endpoint for OpenEnv validators: no auth required.
     task = str(body.get("task", "hard"))
     seed = int(body.get("seed", 42))
     env = HireFlowEnv(task=task, seed=seed)
@@ -78,7 +77,36 @@ def openenv_reset(
     sid = str(uuid.uuid4())
     with _LOCK:
         _SESSIONS[sid] = SessionRecord(env=env, done=False)
-    return JSONResponse(status_code=200, content={"session_id": sid, "observation": obs.model_dump(), "state": env.state()})
+    return JSONResponse(
+        status_code=200,
+        content={
+            "session_id": sid,
+            "observation": obs.model_dump(),
+            "state": env.state(),
+            "done": False,
+        },
+    )
+
+@app.get("/reset")
+def openenv_reset_get(task: str = "hard", seed: int = 42) -> JSONResponse:
+    """
+    Safe fallback for validators or health checks that call GET /reset.
+    Public endpoint: no auth required.
+    """
+    env = HireFlowEnv(task=task, seed=seed)
+    obs = env.reset()
+    sid = str(uuid.uuid4())
+    with _LOCK:
+        _SESSIONS[sid] = SessionRecord(env=env, done=False)
+    return JSONResponse(
+        status_code=200,
+        content={
+            "session_id": sid,
+            "observation": obs.model_dump(),
+            "state": env.state(),
+            "done": False,
+        },
+    )
 
 
 @app.post("/v1/sessions/{session_id}/step")
@@ -198,3 +226,26 @@ def delete_session(session_id: str, x_api_token: str | None = Header(default=Non
 
 if _STATIC_DIR.is_dir():
     app.mount("/static", StaticFiles(directory=str(_STATIC_DIR)), name="static")
+
+@app.exception_handler(Exception)
+async def global_exception_handler(_request: Request, exc: Exception):
+    """
+    Global structured fallback to avoid unhandled 500s.
+    """
+    return JSONResponse(
+        status_code=500,
+        content={
+            "observation": {},
+            "reward": {
+                "total": 0.0,
+                "screening_score": 0.0,
+                "interview_score": 0.0,
+                "final_decision_score": 0.0,
+                "penalties": 0.0,
+                "details": [],
+            },
+            "done": False,
+            "info": {"error": "internal_error", "message": str(exc)},
+            "state": {},
+        },
+    )
