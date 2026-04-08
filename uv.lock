@@ -1,0 +1,57 @@
+version = 1
+requires-python = ">=3.10"
+
+[[package]]
+name = "hireflow-multiagent-env"
+version = "1.0.0"
+source = { editable = "." }
+dependencies = [
+  { name = "fastapi" },
+  { name = "openai" },
+  { name = "openenv" },
+  { name = "pydantic" },
+  { name = "PyYAML" },
+  { name = "python-dotenv" },
+  { name = "uvicorn" },
+]
+
+[[package]]
+name = "fastapi"
+version = "0.121.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+  { name = "pydantic" },
+  { name = "starlette" },
+  { name = "typing-extensions" },
+]
+
+[[package]]
+name = "uvicorn"
+version = "0.38.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+  { name = "click" },
+  { name = "h11" },
+]
+
+[[package]]
+name = "pydantic"
+version = "2.12.4"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+  { name = "annotated-types" },
+  { name = "pydantic-core" },
+  { name = "typing-extensions" },
+]
+
+[[package]]
+name = "openai"
+version = "2.30.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+  { name = "anyio" },
+  { name = "httpx" },
+  { name = "jiter" },
+  { name = "pydantic" },
+  { name = "typing-extensions" },
+]
