@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hireflow-multiagent-env"
+version = "1.0.0"
+description = "OpenEnv-compliant multi-stage hiring simulation with SaaS API and deterministic grading."
+authors = [
+  { name = "Shiva", email = "shiva@example.com" }
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "fastapi>=0.115.0",
+  "uvicorn>=0.30.0",
+  "pydantic>=2.7.0",
+  "openai>=1.40.0",
+  "openenv>=0.1.0",
+  "PyYAML>=6.0.1",
+  "python-dotenv>=1.0.1",
+]
+
+[tool.setuptools]
+packages = ["app"]
