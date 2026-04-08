@@ -127,10 +127,10 @@ def step_session(
         obs, reward, done, info = rec.env.step(body)
     except Exception as exc:
         z = Reward(
-            total=0.0,
-            screening_score=0.0,
-            interview_score=0.0,
-            final_decision_score=0.0,
+            total=0.01,
+            screening_score=0.01,
+            interview_score=0.01,
+            final_decision_score=0.01,
             penalties=0.0,
         )
         payload = {
@@ -169,7 +169,7 @@ def openenv_step(
     _check_auth(x_api_token)
     session_id = body.get("session_id")
     if not session_id:
-        z = Reward(total=0.0, screening_score=0.0, interview_score=0.0, final_decision_score=0.0, penalties=0.0)
+        z = Reward(total=0.01, screening_score=0.01, interview_score=0.01, final_decision_score=0.01, penalties=0.0)
         return JSONResponse(
             status_code=200,
             content={"observation": {}, "reward": z.model_dump(), "done": False, "info": {"error": "missing_session_id"}, "state": {}},
@@ -178,7 +178,7 @@ def openenv_step(
     with _LOCK:
         rec = _SESSIONS.get(str(session_id))
     if not rec:
-        z = Reward(total=0.0, screening_score=0.0, interview_score=0.0, final_decision_score=0.0, penalties=0.0)
+        z = Reward(total=0.01, screening_score=0.01, interview_score=0.01, final_decision_score=0.01, penalties=0.0)
         return JSONResponse(
             status_code=200,
             content={"observation": {}, "reward": z.model_dump(), "done": False, "info": {"error": "session_not_found"}, "state": {}},
@@ -237,10 +237,10 @@ async def global_exception_handler(_request: Request, exc: Exception):
         content={
             "observation": {},
             "reward": {
-                "total": 0.0,
-                "screening_score": 0.0,
-                "interview_score": 0.0,
-                "final_decision_score": 0.0,
+                "total": 0.01,
+                "screening_score": 0.01,
+                "interview_score": 0.01,
+                "final_decision_score": 0.01,
                 "penalties": 0.0,
                 "details": [],
             },

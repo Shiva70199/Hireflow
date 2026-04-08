@@ -9,6 +9,7 @@ from pydantic import ValidationError
 from app.grader import (
     apply_inconsistency_penalty,
     attach_overlap,
+    normalize_score,
     score_final_decision,
     score_interview,
     score_screening,
@@ -160,12 +161,12 @@ class HireFlowEnv:
             + 0.3 * self._raw_state["final_decision_score"]
             + self._raw_state["penalties"]
         )
-        total = max(0.0, min(1.0, total))
+        total = normalize_score(max(0.0, min(1.0, total)))
         return Reward(
             total=round(total, 4),
-            screening_score=round(self._raw_state["screening_score"], 4),
-            interview_score=round(self._raw_state["interview_score"], 4),
-            final_decision_score=round(self._raw_state["final_decision_score"], 4),
+            screening_score=round(normalize_score(self._raw_state["screening_score"]), 4),
+            interview_score=round(normalize_score(self._raw_state["interview_score"]), 4),
+            final_decision_score=round(normalize_score(self._raw_state["final_decision_score"]), 4),
             penalties=round(self._raw_state["penalties"], 4),
             details=[],
         )
@@ -181,10 +182,10 @@ class HireFlowEnv:
                 history=[],
             )
             z = Reward(
-                total=0.0,
-                screening_score=0.0,
-                interview_score=0.0,
-                final_decision_score=0.0,
+                total=0.01,
+                screening_score=0.01,
+                interview_score=0.01,
+                final_decision_score=0.01,
                 penalties=0.0,
             )
             return obs, z, False, {

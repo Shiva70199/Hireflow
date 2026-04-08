@@ -40,6 +40,14 @@ STOPWORDS = {
 }
 
 
+def normalize_score(score: float) -> float:
+    if score <= 0:
+        return 0.01
+    if score >= 1:
+        return 0.99
+    return round(score, 3)
+
+
 def _tokenize(text: str) -> Set[str]:
     tokens = {t.lower() for t in re.findall(r"[A-Za-z0-9\+\#\.]+", text)}
     return {t for t in tokens if t not in STOPWORDS and len(t) > 2}
@@ -61,22 +69,22 @@ def score_reasoning_quality(reasoning: str) -> Tuple[float, float, List[str]]:
 
     if not cleaned:
         penalty -= 0.2
-        quality = 0.0
+        quality = 0.01
         details.append("empty reasoning penalty applied")
         return quality, penalty, details
 
     if len(cleaned.split()) < 6:
         penalty -= 0.1
-        quality = max(0.0, quality - 0.2)
+        quality = normalize_score(max(0.0, quality - 0.2))
         details.append("reasoning too short, relevance penalty applied")
 
     reasoning_tokens = _tokenize(cleaned)
     if reasoning_tokens & IRRELEVANT_ATTRIBUTE_TERMS:
         penalty -= 0.1
-        quality = max(0.0, quality - 0.2)
+        quality = normalize_score(max(0.0, quality - 0.2))
         details.append("irrelevant attribute penalty applied")
 
-    return quality, penalty, details
+    return normalize_score(quality), penalty, details
 
 
 def score_screening(job_text: str, candidate_resume: str, decision: str, reasoning: str) -> Dict:
@@ -89,7 +97,7 @@ def score_screening(job_text: str, candidate_resume: str, decision: str, reasoni
         penalty -= 0.15
         details.append("bias check penalty: ignored relevant skills at screening")
 
-    score = max(0.0, min(1.0, (base * 0.7) + (quality * 0.3)))
+    score = normalize_score(max(0.0, min(1.0, (base * 0.7) + (quality * 0.3))))
     return {"score": score, "penalty": penalty, "details": details}
 
 
@@ -105,7 +113,7 @@ def score_interview(interview_text: str, decision: str, reasoning: str, rating: 
         base = (base * 0.75) + (max(0.0, rating_alignment) * 0.25)
 
     quality, penalty, details = score_reasoning_quality(reasoning)
-    score = max(0.0, min(1.0, (base * 0.7) + (quality * 0.3)))
+    score = normalize_score(max(0.0, min(1.0, (base * 0.7) + (quality * 0.3))))
     return {"score": score, "penalty": penalty, "details": details}
 
 
@@ -139,7 +147,7 @@ def score_final_decision(
                 penalty -= 0.15
                 details.append("bias check penalty: final choice ignores job-relevant skills")
 
-    score = max(0.0, min(1.0, (base * 0.7) + (quality * 0.3)))
+    score = normalize_score(max(0.0, min(1.0, (base * 0.7) + (quality * 0.3))))
     return {"score": score, "penalty": penalty, "details": details}
 
 
